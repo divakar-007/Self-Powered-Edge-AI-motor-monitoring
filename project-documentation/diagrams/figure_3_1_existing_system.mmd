@@ -1,0 +1,14 @@
+%% Figure 3.1 - Architecture of Traditional Industrial Monitoring Systems (Existing System)
+flowchart TD
+    MTR["Industrial Rotating Asset\n(Motor / Gearbox)"] -->|Manual Schedule| TECH["Maintenance Technician\n(Handheld Stethoscope / Pyrometer)"]
+    TECH -->|Occasional Audits| LOG["Paper Logbook / Isolated PC"]
+    LOG -->|Lagged Analysis| AN["Delayed Defect Identification\n(Mean Time to Detect: Days to Weeks)"]
+    AN -->|Reactive / Run-to-Failure| DOWNTIME["Unplanned Production Stoppage\n& Catastrophic Machine Damage"]
+
+    subgraph Limitations["Inherent Limitations of Legacy Monitoring"]
+        L1["No Real-Time Continuous Telemetry"]
+        L2["High Human Labor & Subjective Bias"]
+        L3["Single-Modality Inspection Only"]
+        L4["Cabled Proprietary Scada High Cost"]
+        L5["No Energy-Harvesting or Edge Intelligence"]
+    end

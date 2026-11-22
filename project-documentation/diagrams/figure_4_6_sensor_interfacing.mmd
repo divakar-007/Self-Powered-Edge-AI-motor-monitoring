@@ -1,0 +1,27 @@
+%% Figure 4.6 - Multi-Modal Sensor Interfacing & Signal Conditioning Schematic
+flowchart TD
+    subgraph Circuit1["MPU6050 Interfacing (I2C)"]
+        MPU_DEV["MPU6050"] ---|SDA| I2C_SDA["ESP32-S3 GPIO 8"]
+        MPU_DEV ---|SCL| I2C_SCL["ESP32-S3 GPIO 9"]
+        R_PULL1["4.7kΩ Resistors pulled to 3.3V"] -.-> I2C_SDA & I2C_SCL
+    end
+
+    subgraph Circuit2["DS18B20 Interfacing (OneWire)"]
+        DS_DEV["DS18B20 Probe"] ---|DQ Data| OW_PIN["ESP32-S3 GPIO 4"]
+        R_PULL2["4.7kΩ Pull-Up Resistor to 3.3V"] -.-> OW_PIN
+    end
+
+    subgraph Circuit3["ACS712 Current Conditioning (Voltage Divider)"]
+        ACS_OUT["ACS712 Output (0 - 5.0V)"] --> R1["Resistor R1 = 10kΩ"]
+        R1 --> ADC_PIN1["ESP32-S3 GPIO 1 (0 - 3.3V Max)"]
+        ADC_PIN1 --> R2["Resistor R2 = 20kΩ"]
+        R2 --> GND1["Common Ground (0V)"]
+    end
+
+    subgraph Circuit4["Piezoelectric Conditioning & Zener Clamp"]
+        PZT_OUT["Piezo Ceramic Disc AC Output"] --> BRIDGE["1N5819 Schottky Full-Bridge Rectifier"]
+        BRIDGE --> FILT["10µF Smoothing Capacitor"]
+        FILT --> CLAMP["1N4728A 3.3V Zener Diode (Parallel)"]
+        CLAMP --> LOAD["100kΩ Evaluation Load Resistor"]
+        LOAD --> ADC_PIN2["ESP32-S3 GPIO 2 (ADC1_1)"]
+    end

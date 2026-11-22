@@ -1,0 +1,40 @@
+```mermaid
+graph TD
+    HOST["Host Machine Operating System (Windows / Linux)"]
+
+    subgraph Docker_Compose["Docker Compose Virtual Bridge Network (mems-net)"]
+        subgraph CONT_FRONT["Container: mems-frontend"]
+            NGINX["Nginx Web Server :80<br/>(Serves Production React Build)"]
+        end
+
+        subgraph CONT_BACK["Container: mems-backend"]
+            UVICORN["Uvicorn ASGI Server :8000<br/>(FastAPI Application Tier)"]
+        end
+
+        subgraph CONT_MQTT["Container: mems-broker"]
+            MOSQUITTO["Eclipse Mosquitto Broker :1883<br/>(MQTT Messaging Hub)"]
+        end
+
+        subgraph CONT_DB["Container: mems-influxdb"]
+            INFLUXDB["InfluxDB Engine :8086<br/>(Time-Series Database)"]
+        end
+
+        VOL_SQLITE[("SQLite Volume<br/>mems_data.db")]
+        VOL_INFLUX[("InfluxDB Volume<br/>engine/data")]
+        VOL_MOSQ[("Mosquitto Volume<br/>mosquitto.conf")]
+    end
+
+    EXT_USER["Web Browser (User)"]
+    EXT_ESP["ESP32-S3 Edge Node (WiFi)"]
+
+    EXT_USER -->|Port 80 / 5173| NGINX
+    EXT_USER -->|Port 8000 (REST / WS)| UVICORN
+    EXT_ESP -->|Port 1883 (MQTT)| MOSQUITTO
+
+    NGINX -.->|Reverse Proxy / API| UVICORN
+    MOSQUITTO <-->|TCP Pub/Sub| UVICORN
+    UVICORN -->|Read / Write| VOL_SQLITE
+    UVICORN -->|Write Points| INFLUXDB
+    INFLUXDB --> VOL_INFLUX
+    MOSQUITTO --> VOL_MOSQ
+```

@@ -1,0 +1,40 @@
+%% Figure 4.1 - Three-Tier Architectural Topology (Presentation, Application, Data)
+flowchart TD
+    subgraph Tier1["TIER 1: PRESENTATION TIER (Frontend Client)"]
+        DASH["Dashboard View\n(6 KPIs, Circular Health Gauge, Charts)"]
+        LIVE["Live Telemetry View\n(6-DOF MPU6050, Temp, Current, FFT)"]
+        FAULT["Fault Detection View\n(Alarm Matrix, Prescriptions, Injection)"]
+        ENG["Energy Monitoring View\n(Piezo Volts, Power uW, Cap Calculator)"]
+        HIST["Historical Audit View\n(Time Filter, Table, CSV Export)"]
+        SET["Settings View\n(Threshold Sync, Identifiers, Diagnostics)"]
+    end
+
+    subgraph Comm1["Client-Server Interface"]
+        WS["WebSocket Link (ws://localhost:8000/ws/sensors)"]
+        REST["REST API Calls (http://localhost:8000/api/*)"]
+    end
+
+    subgraph Tier2["TIER 2: APPLICATION TIER (FastAPI Backend)"]
+        ROUTERS["API Routers\n(/api/sensors, /api/machines, /api/alerts, /api/analytics)"]
+        SCHEMAS["Pydantic Schemas\n(Input Validation & Serialization)"]
+        CORE["Core Processing Engine\n• NumPy Vector RMS & FFT Analysis\n• Fault State Tracker & Deduplication\n• ITinyMLDetector Interface Hook\n• Physics-Informed Sensor Simulator"]
+        MQTTC["Paho MQTT Client Manager\n(Auto-Reconnect & Async Loop Queue)"]
+    end
+
+    subgraph Comm2["Database Abstraction Layer"]
+        SQLA["SQLAlchemy ORM 2.0 Engine"]
+        INFC["InfluxDB Client Write & Query APIs"]
+    end
+
+    subgraph Tier3["TIER 3: DATA TIER (Storage Engines)"]
+        SQLITE["SQLite Relational DB\n(mems_industrial.db)\n• machines\n• sensor_configurations\n• alerts\n• sensor_readings"]
+        INFLUX["InfluxDB v2 Time-Series\n(motor_telemetry Bucket)\n• motor_sensor_data\n• 30-Day Auto Retention"]
+    end
+
+    DASH & LIVE & FAULT & ENG & HIST & SET <--> WS & REST
+    WS & REST <--> ROUTERS
+    ROUTERS <--> SCHEMAS <--> CORE
+    MQTTC --> CORE
+    CORE <--> SQLA & INFC
+    SQLA <--> SQLITE
+    INFC <--> INFLUX

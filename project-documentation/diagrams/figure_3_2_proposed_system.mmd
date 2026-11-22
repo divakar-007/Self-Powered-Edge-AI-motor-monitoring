@@ -1,0 +1,43 @@
+%% Figure 3.2 - Proposed Edge AI & Multi-Modal IoT Monitoring Architecture
+flowchart TD
+    subgraph Asset["Monitored Machine"]
+        DCM["DC Motor Asset"]
+    end
+
+    subgraph Node["Edge Perception Layer (ESP32-S3)"]
+        SENS["Multimodal Sensors\n(MPU6050, DS18B20, ACS712, Piezo)"]
+        COND["Signal Conditioning & Voltage Protection\n(Dividers, Schottky Rectifier, Zener Clamp)"]
+        MCU["ESP32-S3 Edge Controller\n(Sampling, Oversampling, JSON Serialization)"]
+        SENS --> COND --> MCU
+    end
+
+    subgraph Comm["Adaptive Wireless Gateway"]
+        BROKER["Mosquitto MQTT Broker\n(QoS 0/1, Port 1883)"]
+    end
+
+    subgraph App["Application Tier (FastAPI Engine)"]
+        FAST["FastAPI ASGI Server"]
+        DSP["Signal Processing (Vector RMS, FFT)"]
+        FAULT["Rule-Based Anomaly & Recovery State Tracker"]
+        TINY["ITinyMLDetector Inference Hook"]
+        WS["WebSocket Broadcasting Hub"]
+        FAST --> DSP --> FAULT --> TINY
+        FAULT --> WS
+    end
+
+    subgraph Data["Hybrid Data Tier"]
+        SQL["SQLite Relational DB\n(Machines, Thresholds, Alerts)"]
+        INF["InfluxDB v2 Engine\n(High-Speed Time-Series)"]
+    end
+
+    subgraph Pres["Presentation Tier"]
+        UI["React.js Interactive Dashboard\n(Live 1Hz Charts, Gauges, Anomaly Controls)"]
+    end
+
+    DCM --> SENS
+    MCU -->|MQTT Telemetry| BROKER
+    BROKER -->|Ingestion Queue| FAST
+    FAST --> SQL
+    FAST --> INF
+    WS -->|Real-Time Feed| UI
+    UI -->|REST Threshold Updates| FAST

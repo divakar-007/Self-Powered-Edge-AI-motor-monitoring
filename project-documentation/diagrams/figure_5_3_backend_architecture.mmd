@@ -1,0 +1,46 @@
+```mermaid
+graph TD
+    CLIENTS["Clients (React Frontend / External)"]
+    ESP["ESP32-S3 Edge Node"]
+
+    subgraph Backend_App["FastAPI Application Tier (Python)"]
+        ROUTER["API Router & Endpoints<br/>(main.py / routes)"]
+        WS_MGR["ConnectionManager<br/>(WebSocket Broadcast Pool)"]
+        
+        subgraph Core_Services["Core Processing Services"]
+            MQTT_SVC["MQTT Service (paho-mqtt)<br/>(Async Subscriber & Parser)"]
+            SENSOR_SVC["Sensor Service<br/>(Data Ingestion & Routing)"]
+            DSP_SVC["DSP Engine (NumPy / SciPy)<br/>(FFT, Peak-to-Peak, RMS)"]
+            FAULT_SVC["Fault Detection Engine<br/>(ISO 10816 Thresholds & Rules)"]
+            TINYML_IF["TinyML Bridge (ITinyMLDetector)<br/>(Extensible Edge Inference Slot)"]
+        end
+
+        subgraph Data_Access["Data Access Layer (Repository Pattern)"]
+            ORM["SQLAlchemy ORM Models<br/>(SensorReading, FaultEvent, Machine)"]
+            INFLUX_CLIENT["InfluxDB Client 2.0<br/>(Time-Series Point Writer)"]
+        end
+    end
+
+    subgraph Storage_Tier["Data Tier"]
+        SQLITE["SQLite Database<br/>(Relational: Metadata & Events)"]
+        INFLUX["InfluxDB Bucket<br/>(High-Resolution Time Series)"]
+    end
+
+    ESP -->|MQTT Pub: industrial/mems/data| MQTT_SVC
+    CLIENTS -->|HTTP GET / POST| ROUTER
+    CLIENTS <-->|WebSocket Stream /ws/sensors| WS_MGR
+    
+    MQTT_SVC -->|Raw Payload| SENSOR_SVC
+    SENSOR_SVC --> DSP_SVC
+    DSP_SVC --> FAULT_SVC
+    FAULT_SVC -.-> TINYML_IF
+    
+    SENSOR_SVC -->|Push Telemetry| WS_MGR
+    SENSOR_SVC --> ORM
+    SENSOR_SVC --> INFLUX_CLIENT
+    
+    ORM --> SQLITE
+    INFLUX_CLIENT --> INFLUX
+    ROUTER --> ORM
+    ROUTER --> INFLUX_CLIENT
+```

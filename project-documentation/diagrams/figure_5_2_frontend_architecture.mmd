@@ -1,0 +1,37 @@
+```mermaid
+graph TD
+    App["App.jsx (Root Application & Router)"]
+    Nav["Sidebar Navigation & Status Bar"]
+    
+    subgraph UI_Views["Frontend Presentation Views"]
+        DASH["Dashboard.jsx<br/>(System Overview, Gauges, Recent Alerts)"]
+        LIVE["LiveMonitoring.jsx<br/>(High-Frequency Charts: Accel, Gyro, FFT)"]
+        FAULT["FaultDetection.jsx<br/>(ISO 10816 Diagnostics, Prescriptive Guide)"]
+        ENERGY["EnergyMonitoring.jsx<br/>(Harvesting Harvester Analytics, Voc, P_harvest)"]
+        HIST["History.jsx<br/>(Historical Trends, Date Filter, CSV Export)"]
+        SETT["Settings.jsx<br/>(MQTT/WS Configuration, Threshold Settings)"]
+    end
+
+    subgraph State_And_Data["Client Services & Hooks"]
+        WS_CLIENT["useWebSocket Hook<br/>(Real-Time ws://host:8000/ws/sensors)"]
+        REST_CLIENT["apiService.js (Axios / Fetch)<br/>(GET /api/sensors/latest, /api/history)"]
+        STATE_MGR["React State & Context<br/>(Real-Time Sensor Buffers, Metrics)"]
+    end
+
+    subgraph Visual_Components["Chart.js & UI Components"]
+        LINE_CHART["Line Chart Component<br/>(Dynamic Rolling Buffer)"]
+        GAUGE["Gauge Metric Cards<br/>(RMS, Temp, Current, Power)"]
+        BADGE["Status Indicators<br/>(NORMAL, WARNING, CRITICAL)"]
+        ALERT_TABLE["Alert List & Diagnostic Cards"]
+    end
+
+    App --> Nav
+    App --> UI_Views
+    UI_Views --> State_And_Data
+    State_And_Data --> WS_CLIENT
+    State_And_Data --> REST_CLIENT
+    UI_Views --> Visual_Components
+    WS_CLIENT -.->|Stream Updates 5-10Hz| STATE_MGR
+    REST_CLIENT -.->|REST Poll / Config| STATE_MGR
+    STATE_MGR --> Visual_Components
+```

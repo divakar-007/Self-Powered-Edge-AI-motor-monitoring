@@ -1,0 +1,53 @@
+%% Figure 4.7 - Entity-Relationship (ER) Diagram for Relational Storage
+erDiagram
+    MACHINES ||--o{ SENSOR_CONFIGURATIONS : configures
+    MACHINES ||--o{ ALERTS : triggers
+    MACHINES ||--o{ SENSOR_READINGS : logs
+
+    MACHINES {
+        string id PK "Machine Tag (e.g. MOTOR_001)"
+        string machine_name "Descriptive Name"
+        string device_id "Paired Edge Device (e.g. ESP32_001)"
+        string motor_type "Motor Model / Specs"
+        datetime installation_date "Commissioning Date"
+        string status "NORMAL | WARNING | CRITICAL"
+    }
+
+    SENSOR_CONFIGURATIONS {
+        int id PK "Auto Increment Key"
+        string machine_id FK "References MACHINES.id"
+        string sensor_name "vibration | temperature | current | piezo"
+        float warning_threshold "Warning Limit"
+        float critical_threshold "Critical Limit"
+        float calibration_value "Offset Multiplier"
+        datetime updated_at "Last Sync Timestamp"
+    }
+
+    ALERTS {
+        int id PK "Auto Increment Key"
+        string machine_id FK "References MACHINES.id"
+        string alert_type "VIBRATION | TEMPERATURE | CURRENT | MULTI_FAULT"
+        string severity "WARNING | CRITICAL"
+        string description "Prescriptive Diagnostics"
+        float sensor_value "Triggering Magnitude"
+        datetime timestamp "Detection Time"
+        string status "ACTIVE | ACKNOWLEDGED | RESOLVED"
+    }
+
+    SENSOR_READINGS {
+        int id PK "Auto Increment Key"
+        string device_id "Edge Node ID"
+        string machine_id "Machine Tag"
+        datetime timestamp "UTC Timestamp"
+        string source "hardware | simulation"
+        float vibration_x "Accel X (m/s2)"
+        float vibration_y "Accel Y (m/s2)"
+        float vibration_z "Accel Z (m/s2)"
+        float vibration_rms "Calculated Vector RMS"
+        float gyro_x "Angular X (rad/s)"
+        float gyro_y "Angular Y (rad/s)"
+        float gyro_z "Angular Z (rad/s)"
+        float temperature "DS18B20 Temp (C)"
+        float current "ACS712 Current (A)"
+        float piezo_voltage "Harvested Volts (V)"
+    }

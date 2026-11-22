@@ -1,0 +1,50 @@
+%% Figure 4.4 - Hardware Block Diagram and Edge Node Interconnections
+flowchart TD
+    subgraph Power["Power Subsystem"]
+        USB["USB-C 5V @ 1.5A Input"]
+        V5["5.0V VBUS Rail\n(Powers ACS712)"]
+        REG["Onboard LDO Regulator\n(3.3V Output)"]
+        V3["3.3V Power Rail\n(Powers ESP32, MPU6050, DS18B20)"]
+        USB --> V5 --> REG --> V3
+        GND["Common Ground (0V Reference)"]
+    end
+
+    subgraph DC_Drive["DC Motor Drive Subsystem"]
+        EXT_PWR["Bench DC Supply (12V)"]
+        MOTOR["Industrial Small DC Motor"]
+        EXT_PWR -->|12V DC| MOTOR
+    end
+
+    subgraph Transducers["Multimodal Sensor Transducers"]
+        MPU["MPU6050\n(Vibration & Gyro)"]
+        DS["DS18B20\n(Digital Temp Probe)"]
+        ACS["ACS712\n(Current Hall IC)"]
+        PZT["Piezoelectric Disc\n(Kinetic Harvester)"]
+    end
+
+    subgraph Conditioning["Signal Conditioning & Protection"]
+        PULL1["4.7kΩ I2C Pull-Ups to 3.3V"]
+        PULL2["4.7kΩ OneWire Pull-Up to 3.3V"]
+        DIV["Resistive Voltage Divider\n(R1=10kΩ, R2=20kΩ to GND)"]
+        RECT["1N5819 Schottky Bridge\n+ 10uF Cap + 3.3V Zener Clamp"]
+    end
+
+    subgraph Controller["ESP32-S3 Edge Controller"]
+        MCU["ESP32-S3 SoC\n• Xtensa Dual-Core 240MHz\n• 512KB SRAM, 8MB Flash\n• 2.4GHz Wi-Fi (802.11 b/g/n)"]
+        ADC["12-bit SAR ADC Engine"]
+        I2C_CTRL["Hardware I2C Controller"]
+        GPIO_CTRL["OneWire GPIO Controller"]
+    end
+
+    MOTOR -.->|Vibration Coupling| MPU
+    MOTOR -.->|Thermal Dissipation| DS
+    MOTOR -->|Current In-Series| ACS
+    MOTOR -.->|Kinetic Deflection| PZT
+
+    MPU --> PULL1 --> I2C_CTRL
+    DS --> PULL2 --> GPIO_CTRL
+    ACS --> DIV --> ADC
+    PZT --> RECT --> ADC
+
+    I2C_CTRL & GPIO_CTRL & ADC --> MCU
+    MCU -->|Wi-Fi 802.11| NET["Industrial Wi-Fi Access Point"]

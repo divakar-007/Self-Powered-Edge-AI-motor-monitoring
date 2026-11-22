@@ -1,0 +1,21 @@
+%% Figure 4.3 - Level 1 Data Flow Diagram (Subsystem Decomposed DFD)
+flowchart TD
+    HW["Sensors & DC Motor"] -->|Analog & Digital Signals| P1["1.0 Acquire & Condition\nEdge Signals (ESP32-S3)"]
+    P1 -->|JSON Telemetry| P2["2.0 Publish & Route\nvia MQTT Broker"]
+    
+    SIM["Sensor Simulator"] -->|Simulated JSON| P3["3.0 Validate & Ingest\nSensor Payload"]
+    P2 -->|Subscribed Packets| P3
+
+    P3 -->|Validated Numerical Arrays| P4["4.0 Execute DSP\n(Vector RMS & FFT)"]
+    
+    P4 -->|Processed Metrics| P5["5.0 Evaluate Faults\n& Track Alarms"]
+    
+    P5 -->|Active Alarms & Readings| P6["6.0 Persist Data\n(SQLite & InfluxDB)"]
+    
+    P5 -->|Real-Time Broadcast| P7["7.0 Stream over WebSocket\n& Serve REST APIs"]
+    
+    P6 <--> D1[("SQLite Database")]
+    P6 <--> D2[("InfluxDB Bucket")]
+    
+    P7 -->|Live Telemetry Feed| USER["8.0 Render Presentation\nTier Web Dashboard"]
+    USER -->|Threshold Configurations| P5

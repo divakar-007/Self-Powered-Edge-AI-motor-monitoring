@@ -1,0 +1,50 @@
+%% Figure 1.1 - Overview of the Proposed Autonomous Industrial Monitoring System
+flowchart LR
+    subgraph Motor["Industrial Motor Asset"]
+        DCM["Small DC Motor\n(Vibration, Thermal & Current Dynamics)"]
+    end
+
+    subgraph Sensors["Multimodal Sensor Node"]
+        MPU["MPU6050\n(3-Axis Vibration & Gyro)"]
+        DS["DS18B20\n(Digital Temperature)"]
+        ACS["ACS712\n(Electrical Current)"]
+        PZT["Piezoelectric Transducer\n(Kinetic Harvester)"]
+    end
+
+    subgraph Edge["Edge Controller"]
+        ESP["ESP32-S3 Microcontroller\n(Dual-Core Xtensa LX7 @ 240MHz)"]
+    end
+
+    subgraph Comm["Wireless Communication"]
+        MQTT["Mosquitto MQTT Broker\n(Port 1883)"]
+    end
+
+    subgraph Backend["Application Tier (FastAPI)"]
+        APP["FastAPI Server\n(DSP, RMS, FFT, Rules & TinyML Hook)"]
+    end
+
+    subgraph Storage["Data Tier"]
+        SQL["SQLite Relational DB"]
+        INF["InfluxDB Time-Series Engine"]
+    end
+
+    subgraph UI["Presentation Tier (React.js)"]
+        DASH["Industrial Web Dashboard\n(Live 1Hz WebSocket Stream)"]
+    end
+
+    DCM -.->|Vibration| MPU
+    DCM -.->|Heat| DS
+    DCM -.->|Current Draw| ACS
+    DCM -.->|Kinetic Oscillation| PZT
+
+    MPU -->|I2C Bus| ESP
+    DS -->|1-Wire Digital| ESP
+    ACS -->|Conditioned ADC| ESP
+    PZT -->|Rectified & Clamped ADC| ESP
+
+    ESP -->|Wi-Fi / MQTT JSON| MQTT
+    MQTT -->|TCP Subscribe| APP
+    APP -->|CRUD Operations| SQL
+    APP -->|Time-Series Write| INF
+    APP -->|WebSocket /ws/sensors| DASH
+    DASH -->|REST API Control| APP

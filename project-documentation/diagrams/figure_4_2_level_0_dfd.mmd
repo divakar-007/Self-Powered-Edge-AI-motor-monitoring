@@ -1,0 +1,11 @@
+%% Figure 4.2 - Level 0 Data Flow Diagram (Context-Level DFD)
+flowchart LR
+    SENSORS["Multimodal Sensors\n(MPU6050, DS18B20,\nACS712, Piezo Disc)"] -->|Raw Physical Signals| SYS["0.0\nMEMS Industrial\nMotor Health\nMonitoring System"]
+    
+    SIM["Sensor Simulator\n(Synthetic Physics Mode)"] -->|Simulated Telemetry Packets| SYS
+
+    SYS -->|Live Sensor Streaming & Alerts| USER["Plant Engineer /\nMaintenance Operator\n(Web Dashboard)"]
+    
+    USER -->|Threshold Settings & Anomaly Injection| SYS
+    
+    SYS <-->|Time-Series & Relational Storage| DB[("Hybrid Data Tier\n(SQLite & InfluxDB)")]

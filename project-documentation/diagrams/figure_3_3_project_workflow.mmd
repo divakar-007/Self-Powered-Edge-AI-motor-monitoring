@@ -1,0 +1,13 @@
+%% Figure 3.3 - End-to-End System Workflow and Telemetry Pipeline
+flowchart TD
+    STEP1["1. Multimodal Acquisition\n(MPU6050, DS18B20, ACS712, Piezo Disc)"]
+    STEP2["2. Edge Preprocessing & Protection\n(32x ADC Averaging, Voltage Scaling, Rectification)"]
+    STEP3["3. JSON Telemetry Encapsulation\n(Device ID, Machine ID, Timestamp, Source Flag)"]
+    STEP4["4. Wireless MQTT Dispatch\n(Topic: mems/motor001/sensors to Mosquitto:1883)"]
+    STEP5["5. Backend Ingestion & DSP\n(Pydantic Validation, Vector RMS, 64-pt FFT Spectral Analysis)"]
+    STEP6["6. State-Aware Fault Detection\n(Warning/Critical Threshold Check, Alert Deduplication & Recovery)"]
+    STEP7["7. Dual Database Persistence\n(InfluxDB Telemetry Measurement + SQLite Relational Records)"]
+    STEP8["8. Real-Time Push to Presentation Tier\n(WebSocket /ws/sensors to React.js UI)"]
+    STEP9["9. Visualization & Supervisory Action\n(Live Dynamic Charts, Health Gauge, CSV Export, Threshold Sync)"]
+
+    STEP1 --> STEP2 --> STEP3 --> STEP4 --> STEP5 --> STEP6 --> STEP7 --> STEP8 --> STEP9

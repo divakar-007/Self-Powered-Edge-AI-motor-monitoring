@@ -1,0 +1,29 @@
+%% Figure 5.1 - Hardware Prototype Setup
+flowchart TD
+    subgraph Bench["Physical Laboratory Bench Setup"]
+        PSU["Bench Power Supply\n(12V Regulated DC)"]
+        MOTOR["DC Motor\n(Mounted on Test Rig)"]
+        PSU -->|12V Armature Power| MOTOR
+    end
+
+    subgraph SensorArray["Sensor Mountings"]
+        MPU["MPU6050 Accelerometer\n(Bolted rigidly to motor bearing housing)"]
+        DS["DS18B20 Temp Probe\n(Coupled via thermal paste to motor stator)"]
+        ACS["ACS712 Current Module\n(Wired in-series with positive motor lead)"]
+        PZT["Piezoelectric Transducer\n(Mounted to motor cantilever vibration beam)"]
+    end
+
+    subgraph EdgeBox["Conditioning & Microcontroller Enclosure"]
+        PROT["Conditioning PCB\n• 10k/20k Divider\n• Schottky Bridge Rectifier\n• 3.3V Zener Clamp"]
+        ESP["ESP32-S3 Dev Board\n(Powered via USB 5V)"]
+    end
+
+    MOTOR -.->|Vibration| MPU
+    MOTOR -.->|Surface Heat| DS
+    MOTOR -->|Current Loop| ACS
+    MOTOR -.->|Kinetic Deflection| PZT
+
+    MPU -->|I2C| ESP
+    DS -->|OneWire| ESP
+    ACS -->|0-5V| PROT -->|0-3.3V| ESP
+    PZT -->|AC Pulses| PROT -->|Clamped DC| ESP

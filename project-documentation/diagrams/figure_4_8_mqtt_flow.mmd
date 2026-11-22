@@ -1,0 +1,37 @@
+%% Figure 4.8 - MQTT Asynchronous Publish/Subscribe Communication Flow
+sequenceDiagram
+    autonumber
+    participant ESP as ESP32-S3 Edge Node
+    participant BRK as Mosquitto MQTT Broker (:1883)
+    participant BACK as FastAPI Application Tier
+    participant DB as SQLite & InfluxDB
+    participant UI as React Presentation Tier
+
+    Note over ESP,BRK: Network Initialization
+    ESP->>BRK: Connect (ClientID: ESP32S3_MOTOR_NODE_01, KeepAlive: 60s)
+    BRK-->>ESP: CONNACK (Connection Accepted)
+    ESP->>BRK: Publish to [mems/motor001/status] (Online Heartbeat JSON)
+
+    Note over BACK,BRK: Ingestion Pipeline Subscription
+    BACK->>BRK: Connect & Subscribe to [mems/motor001/#]
+    BRK-->>BACK: SUBACK (Granted QoS 0)
+
+    Note over ESP,UI: 1Hz Periodic Telemetry Dispatch
+    loop Every 1000 ms
+        ESP->>BRK: Publish [mems/motor001/sensors] (Multi-Modal JSON)
+        BRK->>BACK: Deliver [mems/motor001/sensors] (Async Thread Callback)
+        BACK->>BACK: Validate Schema & Calculate Vector RMS & FFT
+        BACK->>BACK: Check Thresholds & State Management
+        par Dual Persistence
+            BACK->>DB: Write to InfluxDB & SQLite
+        and Real-Time Web Push
+            BACK->>UI: Broadcast JSON via WebSocket (/ws/sensors)
+        end
+        UI->>UI: Update Live Charts, Gauges & Anomaly Alerts
+    end
+
+    opt Threshold Violation Detected
+        BACK->>DB: Insert Active Alert Record
+        BACK->>UI: Broadcast NEW_ALERT Event with Maintenance Action
+        BACK->>BRK: Publish to [mems/motor001/alerts]
+    end
