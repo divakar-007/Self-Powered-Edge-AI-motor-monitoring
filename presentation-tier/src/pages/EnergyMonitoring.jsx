@@ -209,7 +209,7 @@ const EnergyMonitoring = () => {
       <div className="bg-blue-50 border border-blue-200 rounded-2xl p-4 text-xs text-blue-900 flex items-start gap-3">
         <Info className="w-5 h-5 text-blue-600 shrink-0 mt-0.5" />
         <div className="leading-relaxed">
-          <strong className="font-bold">Engineering Principle:</strong> Piezoelectric open-circuit voltage ($V_{oc}$) is not equivalent to usable energy. Usable electrical energy requires rectification and storage in a capacitor ($E = \frac{1}{2} C V^2$) or dissipation across a load ($P = \frac{V^2}{R}$). The values below distinguish measured rectified voltage from instantaneous calculated electrical power.
+          <strong className="font-bold">Engineering Principle:</strong> Piezoelectric open-circuit voltage (Voc) is not equivalent to usable energy. Usable electrical energy requires rectification and storage in a capacitor (E = 1/2 C V²) or dissipation across a load (P = V² / R). The values below distinguish measured rectified voltage from instantaneous calculated electrical power.
         </div>
       </div>
 
@@ -273,7 +273,7 @@ const EnergyMonitoring = () => {
             <span className="text-sm font-semibold text-slate-500">µJ ({capSizeUf}µF)</span>
           </div>
           <div className="mt-2 text-xs text-slate-500">
-            Formula: $E = \frac{1}{2} C V^2$
+            Formula: E = 1/2 C V²
           </div>
         </div>
       </div>
@@ -317,13 +317,13 @@ const EnergyMonitoring = () => {
               </thead>
               <tbody className="divide-y divide-slate-100 font-mono text-[11px]">
                 <tr>
-                  <td className="py-2.5 px-4 font-sans font-semibold text-slate-800">Rectified Output Voltage ($V_{DC}$)</td>
+                  <td className="py-2.5 px-4 font-sans font-semibold text-slate-800">Rectified Output Voltage (V_DC)</td>
                   <td className="py-2.5 px-4 font-bold text-cyan-700">{currentVoltage.toFixed(2)}</td>
                   <td className="py-2.5 px-4 text-slate-500">Volts</td>
                   <td className="py-2.5 px-4 font-sans text-slate-600">Within safe 0.0V - 3.3V range</td>
                 </tr>
                 <tr>
-                  <td className="py-2.5 px-4 font-sans font-semibold text-slate-800">Instantaneous Power ($P$)</td>
+                  <td className="py-2.5 px-4 font-sans font-semibold text-slate-800">Instantaneous Power (P)</td>
                   <td className="py-2.5 px-4 font-bold text-slate-900">{instantaneousPowerUw.toFixed(2)}</td>
                   <td className="py-2.5 px-4 text-slate-500">µW</td>
                   <td className="py-2.5 px-4 font-sans text-slate-600">Power available across 100kΩ load</td>
@@ -396,7 +396,7 @@ const EnergyMonitoring = () => {
                   <span className="font-mono font-bold text-slate-800">{currentVoltage.toFixed(2)} V</span>
                 </div>
                 <div className="flex justify-between">
-                  <span className="text-slate-500">Stored Energy ($E$):</span>
+                  <span className="text-slate-500">Stored Energy (E):</span>
                   <span className="font-mono font-bold text-emerald-700">{storedEnergyUj} µJ</span>
                 </div>
                 <div className="flex justify-between border-t border-slate-200 pt-1.5">
