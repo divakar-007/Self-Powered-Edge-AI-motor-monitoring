@@ -1,17 +1,26 @@
 # SELF-POWERED MULTIMODAL MEMS SENSOR NODE, EDGE AI AND ADAPTIVE WIRELESS COMMUNICATION FOR AUTONOMOUS INDUSTRIAL MONITORING
+
 **A PROJECT REPORT**
+
 *Submitted in partial fulfillment of the requirements for the award of the degree of*
+
 ### BACHELOR OF ENGINEERING IN ELECTRONICS AND COMMUNICATION ENGINEERING
+
 **Submitted by:**
+
 **[STUDENT FULL NAME]** (Reg. No: **[UNIVERSITY REGISTRATION / ROLL NUMBER]**)
+
 **Under the Guidance of:**
+
 **[NAME OF THE INTERNAL PROJECT GUIDE]**, Assistant Professor / Associate Professor
+
 **DEPARTMENT OF ELECTRONICS AND COMMUNICATION ENGINEERING**  
 **[NAME OF THE AFFILIATED ENGINEERING COLLEGE / INSTITUTE]**, [CAMPUS ADDRESS, DISTRICT, STATE, PIN CODE, COUNTRY]  
 **Affiliated to [NAME OF THE AFFILIATING TECHNICAL UNIVERSITY]**  
 **Academic Year: 2025 - 2026**
 
 ---
+
 # CERTIFICATE
 
 This is to certify that the project report entitled "SELF-POWERED MULTIMODAL MEMS SENSOR NODE, EDGE AI AND ADAPTIVE WIRELESS COMMUNICATION FOR AUTONOMOUS INDUSTRIAL MONITORING" is a bona fide record of independent project work carried out by [STUDENT FULL NAME] (Registration No: [UNIVERSITY REGISTRATION / ROLL NUMBER]) in partial fulfillment of the requirements for the award of the degree of BACHELOR OF ENGINEERING in ELECTRONICS AND COMMUNICATION ENGINEERING of [NAME OF THE AFFILIATING TECHNICAL UNIVERSITY] during the academic year 2025 - 2026.
@@ -25,6 +34,7 @@ Project Guide
 Head of the Department  
 
 ---
+
 # DECLARATION
 
 I, [STUDENT FULL NAME] (Registration No: [UNIVERSITY REGISTRATION / ROLL NUMBER]), hereby declare that the project work entitled "SELF-POWERED MULTIMODAL MEMS SENSOR NODE, EDGE AI AND ADAPTIVE WIRELESS COMMUNICATION FOR AUTONOMOUS INDUSTRIAL MONITORING" submitted to the Department of DEPARTMENT OF ELECTRONICS AND COMMUNICATION ENGINEERING, [NAME OF THE AFFILIATED ENGINEERING COLLEGE / INSTITUTE], affiliated to [NAME OF THE AFFILIATING TECHNICAL UNIVERSITY], is an original and authentic piece of engineering investigation carried out under the supervision and guidance of [NAME OF THE INTERNAL PROJECT GUIDE], Assistant Professor / Associate Professor.
@@ -37,6 +47,7 @@ Date: _______________
 **[STUDENT FULL NAME]**  
 
 ---
+
 # ACKNOWLEDGEMENT
 
 The successful completion of this multidisciplinary engineering project was made possible through the invaluable guidance, encouragement, and academic support received from various individuals and institutional authorities.
@@ -52,6 +63,7 @@ Special thanks are due to the technical laboratory staff, faculty review committ
 Finally, I dedicate this work to my parents and family members whose unconditional love, sacrifices, moral encouragement, and enduring faith served as the cornerstone of my academic journey.
 
 ---
+
 # ABSTRACT
 
 Unscheduled mechanical breakdowns of rotating electrical machinery in industrial environments impose severe financial losses, operational downtimes, and catastrophic safety hazards. Traditional condition monitoring approaches depend either on manual periodic vibration logging, which creates temporal monitoring blind spots, or centralized supervisory control and data acquisition (SCADA) systems tethered by extensive physical cabling, which exhibit severe maintenance vulnerabilities in harsh industrial settings. 
@@ -63,7 +75,9 @@ A decoupled Three-Tier Architecture is engineered to ensure high availability, h
 Experimental validation on an instrumented 12V DC motor testbed demonstrates sub-50 ms end-to-end edge-to-dashboard telemetry latency, zero sensor-loss streaming at 10 Hz sampling intervals, and robust multi-parameter threshold fault classification under artificial shaft imbalance, bearing looseness, thermal runaway, and electrical stall conditions. Investigation of the piezoelectric energy harvesting transducer under peak mechanical vibration yielded an open-circuit voltage of 2.84 V and a rectified DC output of 1.42 V across a 10 uF smoothing reservoir, demonstrating a viable thermodynamic pathway toward micro-power auxiliary energy replenishment. The system offers a robust, production-grade foundation for autonomous predictive maintenance across contemporary Industry 4.0 manufacturing facilities.
 
 ---
+
 # TABLE OF CONTENTS
+
 - **Front Matter**
   - Certificate
   - Declaration
@@ -153,6 +167,7 @@ Experimental validation on an instrumented 12V DC motor testbed demonstrates sub
 - **Technical Biography**
 
 ---
+
 # CHAPTER 1: INTRODUCTION
 
 ## 1.1 Introduction
@@ -243,6 +258,7 @@ The multimodal condition monitoring architecture engineered in this project is d
 5. Electric Mobility and Rail Traction Systems: Traction motors in electric locomotives, urban metro rail, and commercial electric vehicles undergo continuous mechanical shock, thermal cycling, and variable torque loads. The integrated vibration and thermal telemetry provides onboard diagnostic health records for fleet depot maintenance.
 
 ---
+
 # CHAPTER 2: LITERATURE SURVEY
 
 ## 2.1 Introduction
@@ -346,6 +362,7 @@ Table 2.1 summarizes the key research papers surveyed, highlighting their core f
 | Gungor & Hancke (2009) [15] | Industrial Wireless Networks | Field evaluation of RF propagation and wireless protocols in factories | Proved MQTT over TCP/IP provides deterministic reliability over lossy industrial wireless channels. |
 
 ---
+
 # CHAPTER 3: PROBLEM DEFINITION AND METHODOLOGY
 
 ## 3.1 Problem Definition
@@ -475,6 +492,7 @@ Stage 7: Frontend Visualization and Prescriptive Maintenance
 The React.js single-page application receives the WebSocket stream, pushes new data points into dynamic rolling Chart.js buffers, updates animated gauge displays, and evaluates current metrics against ISO 10816-3 thresholds. If vibration or temperature exceeds safe limits, the dashboard flashes visual warnings, logs the fault event, and displays prescriptive corrective maintenance actions for plant operators.
 
 ---
+
 # CHAPTER 4: DESIGN OVERVIEW
 
 ## 4.1 Design Overview
@@ -720,6 +738,7 @@ The relational database schema is implemented in SQLite 3 via SQLAlchemy ORM (Fi
 | GND Pins | Common Ground | All Sensors & Motor PSU | System Electrical Reference | 0V Common Ground Reference Plane |
 
 ---
+
 # CHAPTER 5: IMPLEMENTATION
 
 ## 5.1 Software Development
@@ -920,6 +939,7 @@ The integrated system was subjected to rigorous performance benchmarking:
 - Web Client Responsiveness: The React dashboard rendered 100-point rolling waveforms at 60 FPS consuming <4% client CPU utilization and zero detectable JavaScript memory leaks over extended testing sessions.
 
 ---
+
 # CHAPTER 6: RESULTS AND DISCUSSION
 
 ## 6.1 Experimental Setup
@@ -942,10 +962,44 @@ The system was evaluated across four distinct operational conditions:
 
 ## 6.2 Real-Time Monitoring Results
 
-The supervisory React.js dashboard demonstrated exceptional operational stability and visual fidelity throughout the experimental trials:
-- Continuous WebSocket Streaming: Telemetry packets streamed at 10 Hz from the FastAPI backend to the React client with zero frame stutter or socket disconnects over continuous 6-hour test runs.
-- Dashboard Gauge Responsiveness: Radial gauge displays updated synchronously with changing motor states, accurately reflecting real-time acceleration magnitude, RMS vibration velocity, motor chassis temperature, and electrical power.
-- Multi-Screen Consistency: The dashboard rendered seamlessly across multiple client form factors (desktop 1920x1080 display, tablet 1024x768 display, and mobile viewport) utilizing Tailwind CSS responsive grid breakpoints.
+The supervisory React.js dashboard demonstrated exceptional operational stability, responsive visual fidelity, and deterministic telemetry throughput throughout all experimental evaluation trials. The captured user interface screens from the live physical testbed monitoring session are presented below:
+
+1. Executive Web Dashboard (Figure 6.1):
+The primary executive overview renders real-time composite operational KPIs. Radial animated gauges depict the composite Machine Health Score (95%), Peak RMS Vibration Velocity (0.82 mm/s), Motor Winding Casing Temperature (37.0 deg C), and Electrical Supply Current (0.45A). Dynamic badge widgets highlight the current ISO 10816-3 Zone A status ("Good - Optimal Operating Condition"). An active diagnostic notification ticker surfaces system events and alert acknowledgments in real time.
+
+2. High-Frequency Live Waveform Monitoring (Figure 6.2):
+The Live Monitoring view renders high-speed streaming telemetry updating at 10 Hz via persistent WebSockets (/ws/sensors). The top canvas displays synchronized rolling time-series waveforms for tri-axial acceleration (ax in blue, ay in purple, az in emerald green) alongside tri-axial angular rates (gx, gy, gz). The lower canvas renders a real-time Fast Fourier Transform (FFT) spectral magnitude plot, allowing operators to visually isolate the fundamental 1X rotational harmonic (50.0 Hz) and identify high-frequency bearing micro-shocks.
+
+3. Fault Detection & Prescriptive Maintenance Center (Figure 6.3):
+The Fault Detection interface maps real-time RMS vibration velocity directly onto the four ISO 10816-3 mechanical severity zones: Zone A (Good: <0.71 mm/s), Zone B (Acceptable: 0.71 - 1.80 mm/s), Zone C (Unsatisfactory: 1.80 - 4.50 mm/s), and Zone D (Unacceptable: >=4.50 mm/s). When an anomaly occurs, the system provides automated prescriptive maintenance guidance, detailing root causes (e.g., dynamic rotor unbalance or bearing fatigue) and recommending immediate corrective actions (e.g., mass re-balancing or lubrication).
+
+4. Kinetic Energy Harvesting Analytics (Figure 6.4):
+The Energy Monitoring dashboard presents empirical electrical characteristics captured from the chassis-mounted PZT piezoelectric transducer. It displays real-time open-circuit AC voltage (Voc), rectified DC potential (V_DC) across the 10 uF reservoir capacitor, accumulated stored energy in microjoules (E = 0.5 * C * V^2), and estimated continuous harvestable micro-power.
+
+5. Historical Records, Date Filtering, and Audit Center (Figure 6.5):
+The Historical Analytics interface facilitates deep retrospective investigation. Plant engineers can filter telemetry records by date range, query specific operational parameters, review chronological fault event logs, and generate one-click CSV export files for external statistical and enterprise audit compliance.
+
+### Experimental User Interface Screenshots
+
+![Figure 6.1: Web Dashboard Interface - Executive Overview & Status](screenshots/figure_6_1_dashboard.png)
+
+*Figure 6.1: Web Dashboard Interface - Executive Overview & Status. Displays radial KPI gauges (Overall Health, RMS Vibration, Temperature, Current), ISO 10816 Zone status, and real-time alert ticker.*
+
+![Figure 6.2: Real-Time Live Monitoring View (Tri-Axial Acceleration & FFT Spectrum)](screenshots/figure_6_2_live_monitoring.png)
+
+*Figure 6.2: Real-Time Live Monitoring View. Renders dynamic 10 Hz waveforms for tri-axial acceleration (ax, ay, az), angular rate, and real-time Fast Fourier Transform (FFT) frequency spectrum.*
+
+![Figure 6.3: Fault Detection Center with Prescriptive Maintenance Diagnostics](screenshots/figure_6_3_fault_detection.png)
+
+*Figure 6.3: Fault Detection Center. Evaluates real-time vibration against ISO 10816-3 severity zones (Zones A through D) and provides actionable prescriptive maintenance recommendations.*
+
+![Figure 6.4: Kinetic Energy Harvesting Analytics and Storage Capacitor Model](screenshots/figure_6_4_energy_monitoring.png)
+
+*Figure 6.4: Kinetic Energy Harvesting Analytics. Tracks peak open-circuit voltage (Voc), rectified DC potential (V_DC), accumulated electrical energy (uJ), and estimated micro-power output.*
+
+![Figure 6.5: Historical Telemetry Records, Date Filtering, and Audit Log Center](screenshots/figure_6_5_history.png)
+
+*Figure 6.5: Historical Telemetry Records. Allows plant engineers to query time-series sensor databases across specific calendar windows, review past fault incidents, and export CSV audit logs.*
 
 ## 6.3 Vibration Analysis Results
 
@@ -1088,6 +1142,7 @@ The experimental findings validate the architectural integrity, operational reli
 | Deployment Topology | Manual clipboard | Centralized PLC rack | Dockerized microservices |
 
 ---
+
 # CHAPTER 7: CONCLUSION AND FUTURE SCOPE
 
 ## 7.1 Conclusion
@@ -1121,6 +1176,7 @@ Replacing or augmenting 2.4 GHz Wi-Fi with Long Range Wide Area Network (LoRaWAN
 Future supervisory backend versions will incorporate advanced prognostic algorithms—such as Kalman filtering, Particle Filtering, and Long Short-Term Memory (LSTM) recurrent neural networks—to track progressive degradation trajectories over weeks and months, computing automated Remaining Useful Life (RUL) projections in operating hours to revolutionize plant maintenance scheduling.
 
 ---
+
 # REFERENCES
 
 [1] S. Li, L. Da Xu, and S. Zhao, "The internet of things: A survey," Information Systems Frontiers, vol. 17, no. 2, pp. 243-259, Apr. 2015. DOI: 10.1007/s10796-014-9492-7.
@@ -1164,6 +1220,7 @@ Future supervisory backend versions will incorporate advanced prognostic algorit
 [20] Allegro MicroSystems LLC, "ACS712: Fully Integrated, Hall-Effect-Based Linear Current Sensor IC with 2.1 kVRMS Voltage Isolation," Datasheet Rev. 15, Nov. 2017.
 
 ---
+
 # APPENDIX A1: COMPLETE ESP32-S3 FIRMWARE CODE
 
 ```
@@ -1339,6 +1396,7 @@ void loop() {
 ```
 
 ---
+
 # APPENDIX A2: COMPLETE FASTAPI BACKEND CODE STRUCTURE
 
 ```
@@ -1372,6 +1430,7 @@ application-tier/
 ```
 
 ---
+
 # APPENDIX A3: REACT FRONTEND CODE STRUCTURE
 
 ```
@@ -1407,6 +1466,7 @@ presentation-tier/
 ```
 
 ---
+
 # APPENDIX A4: DATABASE SCHEMA AND SQL DDL SCRIPTS
 
 ```
@@ -1479,6 +1539,7 @@ CREATE TABLE IF NOT EXISTS energy_records (
 ```
 
 ---
+
 # APPENDIX A5: HARDWARE PIN ASSIGNMENT AND CONNECTION MAPPING
 
 ```
@@ -1495,6 +1556,7 @@ CREATE TABLE IF NOT EXISTS energy_records (
 ```
 
 ---
+
 # APPENDIX A6: SENSOR SIGNAL CONDITIONING CIRCUITS
 
 ```
@@ -1515,6 +1577,7 @@ The PZT bender generates an AC voltage during chassis vibration:
 ```
 
 ---
+
 # APPENDIX A7: ISO 10816-3 VIBRATION SEVERITY STANDARD TABLE
 
 ```
@@ -1529,6 +1592,7 @@ The International Organization for Standardization (ISO) 10816-3 standard govern
 ```
 
 ---
+
 # APPENDIX A8: DOCKER COMPOSE DEPLOYMENT CONFIGURATION
 
 ```
@@ -1611,6 +1675,7 @@ volumes:
 ```
 
 ---
+
 # TECHNICAL BIOGRAPHY
 
 **[STUDENT FULL NAME]** is a final-year Bachelor of Engineering candidate in the Department of Electronics and Communication Engineering at [NAME OF THE AFFILIATED ENGINEERING COLLEGE / INSTITUTE], affiliated with [NAME OF THE AFFILIATING TECHNICAL UNIVERSITY]. 

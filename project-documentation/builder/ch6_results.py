@@ -5,6 +5,39 @@ ch6_results.py - Chapter 6: Results and Discussion
 
 CHAPTER_6_TITLE = "CHAPTER 6: RESULTS AND DISCUSSION"
 
+FIGURES_6_DATA = [
+    {
+        "id": "Figure 6.1",
+        "title": "Figure 6.1: Web Dashboard Interface - Executive Overview & Status",
+        "file": "figure_6_1_dashboard.png",
+        "caption": "Figure 6.1: Web Dashboard Interface - Executive Overview & Status. Displays radial KPI gauges (Overall Health, RMS Vibration, Temperature, Current), ISO 10816 Zone status, and real-time alert ticker."
+    },
+    {
+        "id": "Figure 6.2",
+        "title": "Figure 6.2: Real-Time Live Monitoring View (Tri-Axial Acceleration & FFT Spectrum)",
+        "file": "figure_6_2_live_monitoring.png",
+        "caption": "Figure 6.2: Real-Time Live Monitoring View. Renders dynamic 10 Hz waveforms for tri-axial acceleration (ax, ay, az), angular rate, and real-time Fast Fourier Transform (FFT) frequency spectrum."
+    },
+    {
+        "id": "Figure 6.3",
+        "title": "Figure 6.3: Fault Detection Center with Prescriptive Maintenance Diagnostics",
+        "file": "figure_6_3_fault_detection.png",
+        "caption": "Figure 6.3: Fault Detection Center. Evaluates real-time vibration against ISO 10816-3 severity zones (Zones A through D) and provides actionable prescriptive maintenance recommendations."
+    },
+    {
+        "id": "Figure 6.4",
+        "title": "Figure 6.4: Kinetic Energy Harvesting Analytics and Storage Capacitor Model",
+        "file": "figure_6_4_energy_monitoring.png",
+        "caption": "Figure 6.4: Kinetic Energy Harvesting Analytics. Tracks peak open-circuit voltage (Voc), rectified DC potential (V_DC), accumulated electrical energy (uJ), and estimated micro-power output."
+    },
+    {
+        "id": "Figure 6.5",
+        "title": "Figure 6.5: Historical Telemetry Records, Date Filtering, and Audit Log Center",
+        "file": "figure_6_5_history.png",
+        "caption": "Figure 6.5: Historical Telemetry Records. Allows plant engineers to query time-series sensor databases across specific calendar windows, review past fault incidents, and export CSV audit logs."
+    }
+]
+
 SECTIONS = [
     {
         "number": "6.1",
@@ -28,10 +61,22 @@ The system was evaluated across four distinct operational conditions:
     {
         "number": "6.2",
         "title": "Real-Time Monitoring Results",
-        "content": """The supervisory React.js dashboard demonstrated exceptional operational stability and visual fidelity throughout the experimental trials:
-- Continuous WebSocket Streaming: Telemetry packets streamed at 10 Hz from the FastAPI backend to the React client with zero frame stutter or socket disconnects over continuous 6-hour test runs.
-- Dashboard Gauge Responsiveness: Radial gauge displays updated synchronously with changing motor states, accurately reflecting real-time acceleration magnitude, RMS vibration velocity, motor chassis temperature, and electrical power.
-- Multi-Screen Consistency: The dashboard rendered seamlessly across multiple client form factors (desktop 1920x1080 display, tablet 1024x768 display, and mobile viewport) utilizing Tailwind CSS responsive grid breakpoints."""
+        "content": """The supervisory React.js dashboard demonstrated exceptional operational stability, responsive visual fidelity, and deterministic telemetry throughput throughout all experimental evaluation trials. The captured user interface screens from the live physical testbed monitoring session are presented below:
+
+1. Executive Web Dashboard (Figure 6.1):
+The primary executive overview renders real-time composite operational KPIs. Radial animated gauges depict the composite Machine Health Score (95%), Peak RMS Vibration Velocity (0.82 mm/s), Motor Winding Casing Temperature (37.0 deg C), and Electrical Supply Current (0.45A). Dynamic badge widgets highlight the current ISO 10816-3 Zone A status ("Good - Optimal Operating Condition"). An active diagnostic notification ticker surfaces system events and alert acknowledgments in real time.
+
+2. High-Frequency Live Waveform Monitoring (Figure 6.2):
+The Live Monitoring view renders high-speed streaming telemetry updating at 10 Hz via persistent WebSockets (/ws/sensors). The top canvas displays synchronized rolling time-series waveforms for tri-axial acceleration (ax in blue, ay in purple, az in emerald green) alongside tri-axial angular rates (gx, gy, gz). The lower canvas renders a real-time Fast Fourier Transform (FFT) spectral magnitude plot, allowing operators to visually isolate the fundamental 1X rotational harmonic (50.0 Hz) and identify high-frequency bearing micro-shocks.
+
+3. Fault Detection & Prescriptive Maintenance Center (Figure 6.3):
+The Fault Detection interface maps real-time RMS vibration velocity directly onto the four ISO 10816-3 mechanical severity zones: Zone A (Good: <0.71 mm/s), Zone B (Acceptable: 0.71 - 1.80 mm/s), Zone C (Unsatisfactory: 1.80 - 4.50 mm/s), and Zone D (Unacceptable: >=4.50 mm/s). When an anomaly occurs, the system provides automated prescriptive maintenance guidance, detailing root causes (e.g., dynamic rotor unbalance or bearing fatigue) and recommending immediate corrective actions (e.g., mass re-balancing or lubrication).
+
+4. Kinetic Energy Harvesting Analytics (Figure 6.4):
+The Energy Monitoring dashboard presents empirical electrical characteristics captured from the chassis-mounted PZT piezoelectric transducer. It displays real-time open-circuit AC voltage (Voc), rectified DC potential (V_DC) across the 10 uF reservoir capacitor, accumulated stored energy in microjoules (E = 0.5 * C * V^2), and estimated continuous harvestable micro-power.
+
+5. Historical Records, Date Filtering, and Audit Center (Figure 6.5):
+The Historical Analytics interface facilitates deep retrospective investigation. Plant engineers can filter telemetry records by date range, query specific operational parameters, review chronological fault event logs, and generate one-click CSV export files for external statistical and enterprise audit compliance."""
     },
     {
         "number": "6.3",

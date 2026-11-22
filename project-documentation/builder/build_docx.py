@@ -17,7 +17,11 @@ from ch2_literature import CHAPTER_2_TITLE, SECTIONS as CH2_SECTIONS, TABLE_2_1_
 from ch3_methodology import CHAPTER_3_TITLE, SECTIONS as CH3_SECTIONS
 from ch4_design import CHAPTER_4_TITLE, SECTIONS as CH4_SECTIONS, TABLE_4_1_DATA
 from ch5_implementation import CHAPTER_5_TITLE, SECTIONS as CH5_SECTIONS
-from ch6_results import CHAPTER_6_TITLE, SECTIONS as CH6_SECTIONS, TABLE_6_1_DATA, TABLE_6_2_DATA, TABLE_6_3_DATA, TABLE_6_4_DATA, TABLE_6_5_DATA, TABLE_6_6_DATA
+from ch6_results import (
+    CHAPTER_6_TITLE, SECTIONS as CH6_SECTIONS,
+    FIGURES_6_DATA,
+    TABLE_6_1_DATA, TABLE_6_2_DATA, TABLE_6_3_DATA, TABLE_6_4_DATA, TABLE_6_5_DATA, TABLE_6_6_DATA
+)
 from ch7_conclusion import CHAPTER_7_TITLE, SECTIONS as CH7_SECTIONS
 from references_appendices import (
     REFERENCES_LIST,
@@ -77,10 +81,7 @@ def add_table_to_doc(doc, table_data):
             p = row_cells[col_idx].paragraphs[0]
             p.paragraph_format.line_spacing = 1.15
             p.paragraph_format.space_after = Pt(2)
-            if col_idx == 0:
-                p.alignment = WD_ALIGN_PARAGRAPH.LEFT
-            else:
-                p.alignment = WD_ALIGN_PARAGRAPH.LEFT
+            p.alignment = WD_ALIGN_PARAGRAPH.LEFT
             for r in p.runs:
                 r.font.name = "Times New Roman"
                 r.font.size = Pt(9.5)
@@ -266,7 +267,7 @@ def build_docx_report(output_path):
         "  5.1 Software Development", "  5.2 Hardware Setup", "  5.3 Sensor Data Collection", "  5.4 Data Processing",
         "  5.5 Fault Detection Implementation", "  5.6 Docker Containerisation", "  5.7 System Integration", "  5.8 Performance Evaluation",
         "Chapter 6: Results and Discussion",
-        "  6.1 Experimental Setup", "  6.2 Real-Time Monitoring Results", "  6.3 Vibration Analysis Results", "  6.4 Temperature Monitoring Results",
+        "  6.1 Experimental Setup", "  6.2 Real-Time Monitoring Results & Dashboard Screenshots", "  6.3 Vibration Analysis Results", "  6.4 Temperature Monitoring Results",
         "  6.5 Current Monitoring Results", "  6.6 Energy Harvesting Investigation Results", "  6.7 Fault Detection Performance",
         "  6.8 System Latency and Performance", "  6.9 Discussion",
         "Chapter 7: Conclusion and Future Scope",
@@ -329,10 +330,34 @@ def build_docx_report(output_path):
     
     # ==================== CHAPTER 6 ====================
     add_heading_1(doc, CHAPTER_6_TITLE)
+    screenshots_dir = os.path.join(os.path.dirname(__file__), "..", "screenshots")
     for s in CH6_SECTIONS:
         add_heading_2(doc, f"{s['number']} {s['title']}")
         for para in s["content"].split("\n\n"):
             add_body_paragraph(doc, para)
+            
+        # Embed screenshots under section 6.2
+        if s["number"] == "6.2":
+            for fig in FIGURES_6_DATA:
+                img_path = os.path.join(screenshots_dir, fig["file"])
+                if os.path.exists(img_path):
+                    p_img = doc.add_paragraph()
+                    p_img.alignment = WD_ALIGN_PARAGRAPH.CENTER
+                    p_img.paragraph_format.space_before = Pt(14)
+                    p_img.paragraph_format.space_after = Pt(4)
+                    run_img = p_img.add_run()
+                    run_img.add_picture(img_path, width=Inches(5.7))
+                    
+                    p_cap = doc.add_paragraph()
+                    p_cap.alignment = WD_ALIGN_PARAGRAPH.CENTER
+                    p_cap.paragraph_format.space_before = Pt(2)
+                    p_cap.paragraph_format.space_after = Pt(14)
+                    run_cap = p_cap.add_run(fig["caption"])
+                    run_cap.font.name = "Times New Roman"
+                    run_cap.font.size = Pt(10)
+                    run_cap.font.italic = True
+                    run_cap.font.color.rgb = RGBColor(71, 85, 105)
+                    
     add_table_to_doc(doc, TABLE_6_1_DATA)
     add_table_to_doc(doc, TABLE_6_2_DATA)
     add_table_to_doc(doc, TABLE_6_3_DATA)
@@ -381,7 +406,7 @@ def build_docx_report(output_path):
         add_body_paragraph(doc, para)
         
     doc.save(output_path)
-    print(f"[SUCCESS] Generated DOCX report at: {output_path}")
+    print(f"[SUCCESS] Generated DOCX report with screenshots at: {output_path}")
 
 if __name__ == "__main__":
     out_file = os.path.join(os.path.dirname(__file__), "..", "Final_Project_Report.docx")

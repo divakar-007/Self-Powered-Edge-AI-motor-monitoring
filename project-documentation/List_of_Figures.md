@@ -22,3 +22,4 @@
 | **Figure 6.2** | Real-Time Live Monitoring View (Tri-Axial Acceleration & FFT Spectrum) | Section 6.2 |
 | **Figure 6.3** | Fault Detection Center with Prescriptive Maintenance Diagnostics | Section 6.2 |
 | **Figure 6.4** | Kinetic Energy Harvesting Analytics and Storage Capacitor Model | Section 6.2 |
+| **Figure 6.5** | Historical Telemetry Records, Date Filtering, and Audit Log Center | Section 6.2 |

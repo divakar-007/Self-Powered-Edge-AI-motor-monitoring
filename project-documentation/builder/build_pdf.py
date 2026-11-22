@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 """
-build_pdf.py - Compiles Final_Project_Report.pdf using ReportLab
+build_pdf.py - Compiles Final_Project_Report.pdf using ReportLab with embedded screenshots
 """
 
 import os
@@ -9,7 +9,7 @@ from reportlab.lib import colors
 from reportlab.lib.units import inch
 from reportlab.lib.styles import getSampleStyleSheet, ParagraphStyle
 from reportlab.platypus import (
-    SimpleDocTemplate, Paragraph, Spacer, Table, TableStyle, PageBreak, Preformatted, KeepTogether
+    SimpleDocTemplate, Paragraph, Spacer, Table, TableStyle, PageBreak, Preformatted, KeepTogether, Image
 )
 from reportlab.pdfgen import canvas
 from reportlab.lib.enums import TA_CENTER, TA_JUSTIFY, TA_LEFT, TA_RIGHT
@@ -20,7 +20,11 @@ from ch2_literature import CHAPTER_2_TITLE, SECTIONS as CH2_SECTIONS, TABLE_2_1_
 from ch3_methodology import CHAPTER_3_TITLE, SECTIONS as CH3_SECTIONS
 from ch4_design import CHAPTER_4_TITLE, SECTIONS as CH4_SECTIONS, TABLE_4_1_DATA
 from ch5_implementation import CHAPTER_5_TITLE, SECTIONS as CH5_SECTIONS
-from ch6_results import CHAPTER_6_TITLE, SECTIONS as CH6_SECTIONS, TABLE_6_1_DATA, TABLE_6_2_DATA, TABLE_6_3_DATA, TABLE_6_4_DATA, TABLE_6_5_DATA, TABLE_6_6_DATA
+from ch6_results import (
+    CHAPTER_6_TITLE, SECTIONS as CH6_SECTIONS,
+    FIGURES_6_DATA,
+    TABLE_6_1_DATA, TABLE_6_2_DATA, TABLE_6_3_DATA, TABLE_6_4_DATA, TABLE_6_5_DATA, TABLE_6_6_DATA
+)
 from ch7_conclusion import CHAPTER_7_TITLE, SECTIONS as CH7_SECTIONS
 from references_appendices import (
     REFERENCES_LIST,
@@ -189,6 +193,15 @@ def build_pdf_report(output_path):
         keepWithNext=True
     ))
     styles.add(ParagraphStyle(
+        name='FigureCaption',
+        fontName='Times-Italic',
+        fontSize=8.5,
+        leading=12,
+        alignment=TA_CENTER,
+        textColor=colors.HexColor("#475569"),
+        spaceAfter=10
+    ))
+    styles.add(ParagraphStyle(
         name='TableHeader',
         fontName='Times-Bold',
         fontSize=8.5,
@@ -286,7 +299,7 @@ def build_pdf_report(output_path):
         "&nbsp;&nbsp;&nbsp;&nbsp;5.1 Software Development", "&nbsp;&nbsp;&nbsp;&nbsp;5.2 Hardware Setup", "&nbsp;&nbsp;&nbsp;&nbsp;5.3 Sensor Data Collection", "&nbsp;&nbsp;&nbsp;&nbsp;5.4 Data Processing",
         "&nbsp;&nbsp;&nbsp;&nbsp;5.5 Fault Detection Implementation", "&nbsp;&nbsp;&nbsp;&nbsp;5.6 Docker Containerisation", "&nbsp;&nbsp;&nbsp;&nbsp;5.7 System Integration", "&nbsp;&nbsp;&nbsp;&nbsp;5.8 Performance Evaluation",
         "<b>Chapter 6: Results and Discussion</b>",
-        "&nbsp;&nbsp;&nbsp;&nbsp;6.1 Experimental Setup", "&nbsp;&nbsp;&nbsp;&nbsp;6.2 Real-Time Monitoring Results", "&nbsp;&nbsp;&nbsp;&nbsp;6.3 Vibration Analysis Results", "&nbsp;&nbsp;&nbsp;&nbsp;6.4 Temperature Monitoring Results",
+        "&nbsp;&nbsp;&nbsp;&nbsp;6.1 Experimental Setup", "&nbsp;&nbsp;&nbsp;&nbsp;6.2 Real-Time Monitoring Results & Dashboard Screenshots", "&nbsp;&nbsp;&nbsp;&nbsp;6.3 Vibration Analysis Results", "&nbsp;&nbsp;&nbsp;&nbsp;6.4 Temperature Monitoring Results",
         "&nbsp;&nbsp;&nbsp;&nbsp;6.5 Current Monitoring Results", "&nbsp;&nbsp;&nbsp;&nbsp;6.6 Energy Harvesting Investigation Results", "&nbsp;&nbsp;&nbsp;&nbsp;6.7 Fault Detection Performance",
         "&nbsp;&nbsp;&nbsp;&nbsp;6.8 System Latency and Performance", "&nbsp;&nbsp;&nbsp;&nbsp;6.9 Discussion",
         "<b>Chapter 7: Conclusion and Future Scope</b>",
@@ -343,10 +356,22 @@ def build_pdf_report(output_path):
     
     # ==================== CHAPTER 6 ====================
     story.append(Paragraph(CHAPTER_6_TITLE, styles['AcademicH1']))
+    screenshots_dir = os.path.join(os.path.dirname(__file__), "..", "screenshots")
     for s in CH6_SECTIONS:
         story.append(Paragraph(f"{s['number']} {s['title']}", styles['AcademicH2']))
         for p in s["content"].split("\n\n"):
             story.append(Paragraph(p, styles['AcademicBody']))
+            
+        # Embed screenshots under section 6.2
+        if s["number"] == "6.2":
+            for fig in FIGURES_6_DATA:
+                img_path = os.path.join(screenshots_dir, fig["file"])
+                if os.path.exists(img_path):
+                    story.append(Spacer(1, 10))
+                    story.append(Image(img_path, width=460, height=258.75))
+                    story.append(Spacer(1, 3))
+                    story.append(Paragraph(fig["caption"], styles['FigureCaption']))
+                    story.append(Spacer(1, 12))
             
     story.append(Paragraph(TABLE_6_1_DATA["title"], styles['TableTitle']))
     story.append(create_pdf_table(TABLE_6_1_DATA, styles, [110, 60, 60, 65, 75, 75, 40]))
@@ -398,7 +423,7 @@ def build_pdf_report(output_path):
         story.append(Paragraph(p, styles['AcademicBody']))
         
     doc.build(story, canvasmaker=NumberedCanvas)
-    print(f"[SUCCESS] Generated PDF report at: {output_path}")
+    print(f"[SUCCESS] Generated PDF report with screenshots at: {output_path}")
 
 if __name__ == "__main__":
     out_file = os.path.join(os.path.dirname(__file__), "..", "Final_Project_Report.pdf")
