@@ -1,0 +1,42 @@
+version: '3.8'
+
+services:
+  # Mosquitto MQTT Broker
+  mosquitto:
+    image: eclipse-mosquitto:2.0.18
+    container_name: mems_mosquitto_broker
+    restart: unless-stopped
+    ports:
+      - "1883:1883"
+      - "9001:9001"
+    volumes:
+      - ./mosquitto/config/mosquitto.conf:/mosquitto/config/mosquitto.conf:ro
+      - ./mosquitto/data:/mosquitto/data
+      - ./mosquitto/log:/mosquitto/log
+    networks:
+      - mems-net
+
+  # InfluxDB Time-Series Database
+  influxdb:
+    image: influxdb:2.7.5-alpine
+    container_name: mems_influxdb_timeseries
+    restart: unless-stopped
+    ports:
+      - "8086:8086"
+    environment:
+      - DOCKER_INFLUXDB_INIT_MODE=setup
+      - DOCKER_INFLUXDB_INIT_USERNAME=${INFLUXDB_USER:-admin}
+      - DOCKER_INFLUXDB_INIT_PASSWORD=${INFLUXDB_PASSWORD:-IndustrialMems2026!}
+      - DOCKER_INFLUXDB_INIT_ORG=${INFLUXDB_ORG:-mems_org}
+      - DOCKER_INFLUXDB_INIT_BUCKET=${INFLUXDB_BUCKET:-motor_telemetry}
+      - DOCKER_INFLUXDB_INIT_ADMIN_TOKEN=${INFLUXDB_TOKEN:-mems-industrial-secret-token-2026}
+      - DOCKER_INFLUXDB_INIT_RETENTION=30d
+    volumes:
+      - ../data-tier/influxdb/data:/var/lib/influxdb2
+      - ../data-tier/influxdb/config:/etc/influxdb2
+    networks:
+      - mems-net
+
+networks:
+  mems-net:
+    driver: bridge
